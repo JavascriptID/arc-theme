@@ -70,7 +70,7 @@ if ENABLE_GNOME_SHELL
 
 	sassc $(srcdir)/gnome-shell/$(GNOME_SHELL_VERSION)/sass/gnome-shell.scss $(srcdir)/gnome-shell/$(GNOME_SHELL_VERSION)/gnome-shell.css;
 
-	cd $(srcdir)/gnome-shell/$(GNOME_SHELL_VERSION) && cp -R \
+	cd $(srcdir)/gnome-shell/$(GNOME_SHELL_VERSION) && cp -RL \
 		common-assets \
 		light-assets \
 		gnome-shell.css \
@@ -81,7 +81,7 @@ if ENABLE_DARK
 
 	sassc $(srcdir)/gnome-shell/$(GNOME_SHELL_VERSION)/sass/gnome-shell-dark.scss $(srcdir)/gnome-shell/$(GNOME_SHELL_VERSION)/gnome-shell-dark.css;
 
-	cd $(srcdir)/gnome-shell/$(GNOME_SHELL_VERSION) && cp -R \
+	cd $(srcdir)/gnome-shell/$(GNOME_SHELL_VERSION) && cp -RL \
 		common-assets \
 		dark-assets \
 		$(ithemedarkdir)/gnome-shell
@@ -238,6 +238,18 @@ if ENABLE_DARK
 endif # ENABLE_DARK
 
 endif #!ENABLE_TRANSPARENCY
+
+	@if [ "$(GTK_VERSION)" != "3.18" ]; then \
+		cd $(srcdir)/gtk-3.0/$(GTK3_VERSION) && cp -RL compile-gresources.sh $(ithemedir)/gtk-3.0/compile-gresources.sh;\
+		cd ../..;\
+		cd $(srcdir)/gtk-3.0/$(GTK3_VERSION) && cp -RL compile-gresources.sh $(ithemedarkdir)/gtk-3.0/compile-gresources.sh;\
+		cd ../..;\
+		cd $(srcdir)/gtk-3.0/$(GTK3_VERSION) && cp -RL compile-gresources.sh $(ithemedarkerdir)/gtk-3.0/compile-gresources.sh;\
+		cd ../..;\
+		cd $(ithemedir)/gtk-3.0/ && ./compile-gresources.sh LIGHT;\
+		cd $(ithemedarkdir)/gtk-3.0/ && ./compile-gresources.sh DARK;\
+		cd $(ithemedarkerdir)/gtk-3.0/ && ./compile-gresources.sh DARKER;\
+	fi
 
 endif # ENABLE_GTK3
 
